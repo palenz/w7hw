@@ -1,28 +1,78 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+
+<posts :subData="subData" v-if="subreddit"></posts>
+
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
+import posts from './components/posts.vue'
+ 
 export default {
   name: 'App',
+  data (){
+    return {
+      subData: null,
+      subreddit: null
+    };
+  },
+
+  mounted(){
+    fetch('https://www.reddit.com/r/$(subreddit).json?limit=30')
+    .then(res => res.json())
+    .then(subData => this.subData = subData)
+  },
+
   components: {
-    HelloWorld
+    'posts': posts
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.image-container{
+    font-family: avenir;
+    flex-wrap: wrap;
+    padding: 5px;
+    align-sel: center
+};
+
+.image{
+  align-content: center;
 }
+
+.image-container > div{
+  padding: 5px;
+  align-content: center;
+}
+
+.overlay-slide {
+	position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+    float: left;
+    margin: 10px;
+}
+
+.overlay-slide:hover div {
+    transform: translate(0, 0);
+	transition: 0.8s;
+}
+.overlay-slide div {
+	position: absolute;
+    box-sizing: border-box;
+    bottom: 0;
+    transform: translate(0, 100%);
+    padding: 15px;
+    background-color: rgba(0,0,0,0.5);
+    text-align:center;
+    transition: 0.3s;
+
+}
+.overlay-slide p {
+    font-size: 14px;
+    color: #dddddd;
+}
+
+
 </style>
